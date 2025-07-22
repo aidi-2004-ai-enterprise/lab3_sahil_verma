@@ -1,0 +1,4 @@
+# Python
+.venv/
+lab3_sahil_verma.egg-info/
+__pycache__/
