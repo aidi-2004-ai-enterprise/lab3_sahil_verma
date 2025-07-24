@@ -9,7 +9,7 @@ import os
 import warnings
 warnings.filterwarnings('ignore')
 
-def load_data():
+def load_data() -> pd.DataFrame:
     """Load the penguins dataset from seaborn"""
     print("Loading penguins dataset...")
     df = sns.load_dataset('penguins')
@@ -17,7 +17,7 @@ def load_data():
     print(f"Missing values:\n{df.isnull().sum()}")
     return df
 
-def preprocess_data(df):
+def preprocess_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, np.ndarray, LabelEncoder]:
     """
     Preprocess the data:
     - Handle missing values
@@ -49,7 +49,7 @@ def preprocess_data(df):
     
     return X_encoded, y_encoded, label_encoder
 
-def split_data(X, y):
+def split_data(X: pd.DataFrame, y: np.ndarray) -> Tuple[pd.DataFrame, pd.DataFrame, np.ndarray, np.ndarray]:
     """Split data into training and test sets with stratification"""
     print("\nSplitting data...")
     X_train, X_test, y_train, y_test = train_test_split(
@@ -66,7 +66,7 @@ def split_data(X, y):
     
     return X_train, X_test, y_train, y_test
 
-def train_model(X_train, y_train):
+def train_model(X_train: pd.DataFrame, y_train: np.ndarray) -> xgb.XGBClassifier:
     """Train XGBoost classifier with parameters to prevent overfitting"""
     print("\nTraining XGBoost model...")
     
@@ -87,7 +87,14 @@ def train_model(X_train, y_train):
     print("Model training completed!")
     return xgb_classifier
 
-def evaluate_model(model, X_train, X_test, y_train, y_test, label_encoder):
+def evaluate_model(
+    model: xgb.XGBClassifier,
+    X_train: pd.DataFrame,
+    X_test: pd.DataFrame,
+    y_train: np.ndarray,
+    y_test: np.ndarray,
+    label_encoder: LabelEncoder
+) -> Dict[str, float]:
     """Evaluate the model on both training and test sets"""
     print("\nEvaluating model...")
     
@@ -146,7 +153,12 @@ def evaluate_model(model, X_train, X_test, y_train, y_test, label_encoder):
         'test_f1_weighted': test_f1_weighted
     }
 
-def save_model(model, label_encoder, metrics, feature_names):
+def save_model(
+    model: xgb.XGBClassifier,
+    label_encoder: LabelEncoder,
+    metrics: Dict[str, float],
+    feature_names: List[str]
+) -> None:
     """Save the trained model and associated metadata"""
     print("\nSaving model...")
     
